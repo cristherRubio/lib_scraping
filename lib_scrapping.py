@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import time
 
-# Start a web driver (in this case, Chrome)
+# Start a web driver (in this case, Chrome) 989988
 driver = webdriver.Chrome()
 
 base_url = "https://www.gandhi.com.mx/libros?p="  # Base URL
