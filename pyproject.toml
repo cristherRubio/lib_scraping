@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "lib-scraping"
+name = "lib_scraping"
 version = "0.1.0"
 description = "Project for scraping Ghandi's website"
 authors = ["Your Name <you@example.com>"]

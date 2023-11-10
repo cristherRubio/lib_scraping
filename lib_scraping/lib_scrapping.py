@@ -47,6 +47,7 @@ while True:
             book_resp = requests.get(book_url, headers=headers)
             book_soup = bs(book_resp.text, 'html.parser')
             
+            # Check for ISBN
             isbn = book_soup.find('div', class_='isbn')
             if isbn:
                 new_book.append(isbn.text.split(": ")[1])
@@ -83,22 +84,38 @@ while True:
 
             counter = 0
             info = book_soup.find('div', class_='additional-attributes-wrapper table-wrapper')
-            for i in info.find_all('span', class_='attr-data'):
-                book_info = i.text.strip()
-                new_book.append(book_info)
-                counter += 1
-                if counter == 3:
-                    break
-            
+
+            if info:
+                # Find individual <li> elements
+                li_pages = info.find('li', {'data-li': 'Número de páginas'})
+                li_lang = info.find('li', {'data-li': 'Idioma'})
+                li_date = info.find('li', {'data-li': 'Fecha de publicación'})
+
+                # Extract information from <span> elements inside <li>
+                pages = li_pages.find('span', class_='attr-data').text if li_pages else None
+                lang = li_lang.find('span', class_='attr-data').text.strip() if li_lang else None
+                date = li_date.find('span', class_='attr-data').text.strip() if li_date else None
+
+                # Print the results
+                new_book.append(pages)
+                new_book.append(lang)
+                new_book.append(date)
+            else:
+                break
+
             urls.append(book_url)
             scraped_books.append(new_book)
             time.sleep(0.1)
 
     page_number += 1
+    if page_number % 10 == 0:
+        time.sleep(10)
+        ...
+        # Change IPs and wait
+
 
 # Close the web driver when you're done
 driver.quit()
-
 
 with open("urls.txt", "w") as file:
     for url in urls:
