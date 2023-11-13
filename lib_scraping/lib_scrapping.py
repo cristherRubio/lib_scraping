@@ -77,10 +77,15 @@ while True:
     url = base_url + str(page_number)
     try:
         response = requests.get(url, headers=headers, proxies=proxy)
-        response.raise_for_status()  # Check for errors in the response
+        response.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(f"Error accessing {url}: {e}")
-        break
+        if response.status_code == 503:
+            print("Retrying after a short delay...")
+            time.sleep(5)  # Add a short delay before retrying
+            continue
+        else:
+            break
 
     print(response)
     if response.status_code != 200:
@@ -167,8 +172,8 @@ while True:
             time.sleep(0.1)
 
     page_number += 1
-    if page_number % 10 == 0:
-        time.sleep(10)
+    if page_number % 20 == 0:
+        time.sleep(15)
         ...
         # Change IPs and wait
 
